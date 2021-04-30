@@ -26,13 +26,15 @@ app.post("/v1/users/login", (req, res) => {
 });
 
 app.post("/v1/contacts", (req, res) => {
-  const contact = req.body.contacts;
+  const phone = req.body.contacts[0];
+  const firstCharIsPlus = phone.charAt(0) === "+"
+  const firstCharIsZero = phone.charAt(0) === "0"
   res.status(200).send({
     contacts: [
       {
-        input: contact[0],
+        input: phone,
         status: "valid",
-        wa_id: contact[0],
+        wa_id: firstCharIsPlus ? phone.substring(1) : firstCharIsZero ? '62' + phone.substring(1) : phone,
       },
     ],
     meta: {
